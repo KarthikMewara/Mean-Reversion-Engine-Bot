@@ -1,7 +1,6 @@
 import pandas as pd
 import yfinance as yf
 import streamlit as st
-import requests # --- ADD THIS IMPORT ---
 
 # ttl=3600 means it will keep the data in memory for 1 hour before forcing a fresh download
 @st.cache_data(ttl=3600)
@@ -11,15 +10,8 @@ def fetch_data(symbol: str, start: str, end: str, interval: str = '1d') -> pd.Da
     """
     print(f"Fetching {interval} data for {symbol} from {start} to {end}...")
     
-    # --- THE CLOUD FIX ---
-    # Create a custom session to trick Yahoo Finance into thinking we are a real human browser
-    session = requests.Session()
-    session.headers.update({
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    })
-    
-    # Pass the custom session into yfinance
-    df = yf.download(symbol, start=start, end=end, interval=interval, session=session)
+    # --- THE FIX: Let yfinance handle the browser spoofing internally ---
+    df = yf.download(symbol, start=start, end=end, interval=interval)
     
     if df.empty:
         raise ValueError(f"No data fetched for {symbol}. Check the ticker or dates.")
