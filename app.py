@@ -61,6 +61,14 @@ def fetch_live_tickers():
             }
 # Execute the function to generate the dictionary dynamically
 AVAILABLE_ASSETS = fetch_live_tickers()
+AVAILABLE_ASSETS.update({
+    "BTC-USD": "Bitcoin",
+    "ETH-USD": "Ethereum",
+    "GC=F": "Gold Futures (XAU/USD)",
+    "SI=F": "Silver Futures",
+    "CL=F": "Crude Oil (WTI)",
+    "NG=F": "Natural Gas"
+})
 
 # Create a list of formatted strings for the UI dropdown
 display_options = [f"{ticker} ({name})" for ticker, name in AVAILABLE_ASSETS.items()]
